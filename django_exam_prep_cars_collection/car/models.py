@@ -1,25 +1,48 @@
+from django.core.validators import MinLengthValidator, MinValueValidator
 from django.db import models
 
+
 # Create your models here.
+from django_exam_prep_cars_collection.car.validators import year_range_validator
 
-"""
-•	Car
 
-o	"Type"
-	    Character (choice) field, required.
-	    It should consist of a maximum of 10 characters.
-	    The choices are "Sports Car", "Pickup", "Crossover", "Minibus" and "Other".
-o	"Model"
-	    Character field, required.
-	    It should consist of a maximum of 20 characters.
-	    It should consist of a minimum of 2 characters.
-o	"Year"
-	    Integer field, required.
-	    Valid year is a year between 1980 and 2049 (both inclusive). Otherwise, raise a ValidationError with the message: "Year must be between 1980 and 2049"
-o	"Image Url"
-	    URL field, required.
-o	"Price"
-	    Float field, required.
-	    Price cannot be below 1.	
-
-"""
+class Car(models.Model):
+    CAR_TYPES = (
+        ("Sports Car", "Sports Car"),
+        ("Pickup", "Pickup"),
+        ("Crossover", "Crossover"),
+        ("Minibus", "Minibus"),
+        ("Other", "Other"),
+    )
+    type = models.CharField(
+        max_length=10,
+        null=False,
+        blank=False,
+        choices=CAR_TYPES,
+    )
+    model = models.CharField(
+        max_length=20,
+        null=False,
+        blank=False,
+        validators=(
+            MinLengthValidator(2),
+        )
+    )
+    year = models.IntegerField(
+        null=False,
+        blank=False,
+        validators=(
+            year_range_validator,
+        )
+    )
+    image_url = models.URLField(
+        null=False,
+        blank=False,
+    )
+    price = models.DecimalField(
+        null=False,
+        blank=False,
+        validators=(
+            MinValueValidator(1),
+        )
+    )
