@@ -39,7 +39,7 @@ class Car(models.Model):
         null=False,
         blank=False,
     )
-    price = models.DecimalField(
+    price = models.FloatField(
         null=False,
         blank=False,
         validators=(
